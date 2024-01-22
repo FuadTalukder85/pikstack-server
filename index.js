@@ -26,6 +26,23 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const database = client.db("Pikstack");
+    const pikstackCollection = database.collection("pikstackItemCollection");
+
+    // Add item
+    app.post("/additem", async (req, res) => {
+      const addedItem = req.body;
+      const result = await pikstackCollection.insertOne(addedItem);
+      res.send(result);
+    });
+
+    // Get item
+    app.get("/additem", async (req, res) => {
+      const result = await pikstackCollection.find().toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
@@ -33,7 +50,7 @@ async function run() {
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
