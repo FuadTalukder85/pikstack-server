@@ -5,12 +5,12 @@ require("dotenv").config();
 const port = process.env.PORT || 5100;
 
 //middleware
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 
 //
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.PIKSTACK}:${process.env.DB_PASS}@cluster0.az94fyn.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -38,8 +38,16 @@ async function run() {
     });
 
     // Get item
-    app.get("/additem", async (req, res) => {
+    app.get("/allitem", async (req, res) => {
       const result = await pikstackCollection.find().toArray();
+      res.send(result);
+    });
+
+    // Get item by id
+    app.get("/item/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await pikstackCollection.findOne(query);
       res.send(result);
     });
 
