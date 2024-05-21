@@ -44,7 +44,7 @@ async function run() {
     });
 
     // Get item by id
-    app.get("/item/:id", async (req, res) => {
+    app.get("/assets/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await pikstackCollection.findOne(query);
