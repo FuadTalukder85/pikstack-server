@@ -30,24 +30,32 @@ async function run() {
     const database = client.db("Pikstack");
     const pikstackCollection = database.collection("pikstackItemCollection");
 
-    // Add item
+    // Add assets
     app.post("/additem", async (req, res) => {
       const addedItem = req.body;
       const result = await pikstackCollection.insertOne(addedItem);
       res.send(result);
     });
 
-    // Get item
+    // Get assets
     app.get("/allitem", async (req, res) => {
       const result = await pikstackCollection.find().toArray();
       res.send(result);
     });
 
-    // Get item by id
+    // Get assets by id
     app.get("/assets/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await pikstackCollection.findOne(query);
+      res.send(result);
+    });
+
+    // Delete assets by id
+    app.delete("/assets/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await pikstackCollection.deleteOne(query);
       res.send(result);
     });
 
